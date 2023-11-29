@@ -5,7 +5,19 @@ services:
   - docker
 
 before_install:
-  - docker build -t revalc/docker-react -f Dockerfile.dev .
+  - docker build -t stephengrider/docker-react -f Dockerfile.dev .
 
 script:
-  - docker run -e CI=true revalc/docker-react npm run test -- --coverage
+  - docker run -e CI=true stephengrider/docker-react npm run test
+
+deploy:
+  provider: elasticbeanstalk
+  region: "us-east-1"
+  app: "Test docker"
+  env: "Testdocker-env"
+  bucket_name: "elasticbeanstalk-eu-north-1-483052496857"
+  bucket_path: "Test docker"
+  on:
+    branch: master
+  access_key_id: $AWS_acces_key
+  secret_access_key: "$AWS_acces_key2"
